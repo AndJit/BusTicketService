@@ -21,7 +21,10 @@ public class PaymentController {
     @GetMapping("/id")
     public String getId(@RequestParam String name, @RequestParam int sum){
         String id = UUID.randomUUID().toString() + sum;
-        paymentsRepository.save(new Payment(id, Status.NEW));
+        Status[] statuses = Status.values();
+        int i = new Random().nextInt(3);
+        Status status = statuses[i];
+        paymentsRepository.save(new Payment(id, status));
         return id;
     }
 
@@ -29,20 +32,9 @@ public class PaymentController {
     @GetMapping("/status/{id}")
     public Map<String, String> getStatus(@PathVariable String id){
         HashMap<String, String> out = new HashMap<>();
-        out.put("status", "NONE");
         Payment payment = paymentsRepository.findPaymentByPayId(id);
         if (payment != null) {
-            String statusName = "";
-            if (payment.getStatus() == Status.NEW) {
-                Status[] statuses = Status.values();
-                int i = new Random().nextInt(2) + 1;
-                Status status = statuses[i];
-                payment.setStatus(status);
-                paymentsRepository.save(payment);
-                statusName = statuses[i].name();
-            }else{
-                statusName = payment.getStatus().name();
-            }
+            String statusName = payment.getStatus().name();
             out.put("status", statusName);
         }
         return out;

@@ -2,7 +2,6 @@ package com.aj.bts.TicketManagementSystem;
 
 import com.aj.bts.TicketManagementSystem.db.races.Race;
 import com.aj.bts.TicketManagementSystem.db.races.RacesRepository;
-import com.aj.bts.TicketManagementSystem.db.tickets.Ticket;
 import com.aj.bts.TicketManagementSystem.db.tickets.TicketsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -29,7 +28,7 @@ public class TicketManagementSystemApplication {
 
 
 	@PostConstruct
-	public void generateFlights(){
+	public void generateRaces(){
 		ticketsRepository.deleteAll();
 		racesRepository.deleteAll();
 		for (int i = 0; i < 10; i++) {

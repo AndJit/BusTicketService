@@ -39,8 +39,8 @@ public class PaymentProcessor {
 
     public void fail(String id){
         Ticket ticket = payments.findPaymentByPayId(id).getTicket();
-        ticketService.delete(ticket);
         remove(id);
+        ticketService.delete(ticket);
     }
 
     public void add(String id, Ticket ticket){

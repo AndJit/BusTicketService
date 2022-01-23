@@ -1,5 +1,6 @@
 package com.aj.bts.TicketManagementSystem;
 
+import com.aj.bts.TicketManagementSystem.db.payments.PaymentsRepository;
 import com.aj.bts.TicketManagementSystem.db.races.Race;
 import com.aj.bts.TicketManagementSystem.db.races.RacesRepository;
 import com.aj.bts.TicketManagementSystem.db.tickets.TicketsRepository;
@@ -22,6 +23,9 @@ public class TicketManagementSystemApplication {
 	@Autowired
 	private TicketsRepository ticketsRepository;
 
+	@Autowired
+	private PaymentsRepository paymentsRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(TicketManagementSystemApplication.class, args);
 	}
@@ -29,6 +33,7 @@ public class TicketManagementSystemApplication {
 
 	@PostConstruct
 	public void generateRaces(){
+		paymentsRepository.deleteAll();
 		ticketsRepository.deleteAll();
 		racesRepository.deleteAll();
 		for (int i = 0; i < 10; i++) {

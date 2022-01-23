@@ -1,5 +1,7 @@
 package com.aj.bts.TicketManagementSystem.services;
 
+import com.aj.bts.TicketManagementSystem.db.payments.Payment;
+import com.aj.bts.TicketManagementSystem.db.payments.PaymentsRepository;
 import com.aj.bts.TicketManagementSystem.db.tickets.Ticket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,12 +19,14 @@ public class PaymentProcessor {
     @Autowired
     private TicketService ticketService;
 
-    private static HashMap<String, Ticket> payments = new HashMap();
+    @Autowired
+    private PaymentsRepository payments;
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.SECONDS)
     public void process(){
 
-        payments.keySet().iterator().forEachRemaining(id -> {
+        payments.findAll().iterator().forEachRemaining(payment -> {
+            String id = payment.getPayId();
             switch (paymentService.checkStatus(id)){
                 case FAILED: {
                     fail(id);
@@ -34,20 +38,22 @@ public class PaymentProcessor {
     }
 
     public void fail(String id){
-        Ticket ticket = payments.get(id);
+        Ticket ticket = payments.findPaymentByPayId(id).getTicket();
         ticketService.delete(ticket);
         remove(id);
     }
 
-    public static void add(String id, Ticket ticket){
-        payments.put(id, ticket);
+    public void add(String id, Ticket ticket){
+        payments.save(new Payment(id, ticket));
     }
 
-    private static void remove(String id){
-        payments.remove(id);
+    private void remove(String id){
+        payments.delete(payments.findPaymentByPayId(id));
     }
 
-    public static Ticket getTicket(String id){
-        return payments.get(id);
+    public String getPaymentId(Ticket ticket){
+        return payments.findPaymentByTicketId(ticket.getId()).getPayId();
     }
+
+
 }

@@ -34,4 +34,8 @@ public class TicketService {
         return true;
     }
 
+    public Ticket getTicket(int id){
+        return ticketsRepository.findById(id).get();
+    }
+
 }

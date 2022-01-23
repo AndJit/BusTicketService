@@ -34,7 +34,7 @@ public class TicketController {
         if (ticket.getRace() != null) {
             if (ticketService.save(ticket)) {
                 String id = paymentService.createPay(name, racesRepository.findRaceById(race_id).getPrice());
-                PaymentProcessor.add(id, ticket);
+                paymentProcessor.add(id, ticket);
                 return 200;
             }
         }
@@ -44,12 +44,12 @@ public class TicketController {
     @GetMapping("/info/{id}")
     public Map<String, Object> getInfo(@PathVariable String id){
         Map<String, Object> out = new HashMap<>();
-        Ticket ticket = paymentProcessor.getTicket(id);
+        Ticket ticket = ticketService.getTicket(Integer.parseInt(id));
         out.put("status", null);
         out.put("race", null);
         if (ticket != null) {
             Race race = ticket.getRace();
-            out.put("status", paymentService.checkStatus(id));
+            out.put("status", paymentService.checkStatus(paymentProcessor.getPaymentId(ticket)));
             out.put("race", race);
         }
         return out;

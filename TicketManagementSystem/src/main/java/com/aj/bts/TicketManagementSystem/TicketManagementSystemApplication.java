@@ -4,6 +4,8 @@ import com.aj.bts.TicketManagementSystem.db.payments.PaymentsRepository;
 import com.aj.bts.TicketManagementSystem.db.races.Race;
 import com.aj.bts.TicketManagementSystem.db.races.RacesRepository;
 import com.aj.bts.TicketManagementSystem.db.tickets.TicketsRepository;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +17,7 @@ import java.util.Random;
 
 @SpringBootApplication
 @EnableScheduling
+@OpenAPIDefinition(info = @Info(title = "BusTicketService API", version = "1.0", description = "TicketManagement System"))
 public class TicketManagementSystemApplication {
 
 	@Autowired
